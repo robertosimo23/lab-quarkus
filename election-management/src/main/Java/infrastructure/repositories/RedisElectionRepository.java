@@ -9,6 +9,7 @@ import io.quarkus.redis.datasource.sortedset.ScoreRange;
 import io.quarkus.redis.datasource.sortedset.SortedSetCommands;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,11 @@ public class RedisElectionRepository implements ElectionRepository {
         pubsub.publish("elections", election.id());
     }
 
+    @Override
+    public List<Election> findAll() {
+        return null;
+    }
+
     public Election sync(Election election) {
         var map = commands.zrangebyscoreWithScores("election:" + election.id(),
                         ScoreRange.from(Integer.MIN_VALUE, Integer.MAX_VALUE))
@@ -53,7 +59,7 @@ public class RedisElectionRepository implements ElectionRepository {
         return new Election(election.id(), Map.ofEntries(map));
     }
 
-    @Override
+
     public Election findById(String id) {
         return null;
     }
